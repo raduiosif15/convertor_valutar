@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(ConvertorValutar());
+  runApp(const ConvertorValutar());
 }
 
 class ConvertorValutar extends StatefulWidget {
-  const ConvertorValutar({Key key}) : super(key: key);
+  const ConvertorValutar({Key? key}) : super(key: key);
 
   @override
   _ConvertorValutarState createState() => _ConvertorValutarState();
 }
 
 class _ConvertorValutarState extends State<ConvertorValutar> {
-  String _valoareInEuro;
-  String _valoareInLei;
+  late String _valoareInEuro = '';
+  late String _valoareInLei = '';
 
-  String _eroareInput;
+  late String _eroareInput = '';
 
-  double _cursValutarEuroLei = 4.93;
+  final double _cursValutarEuroLei = 4.93;
 
   final TextEditingController _controller = TextEditingController();
 
@@ -26,14 +26,14 @@ class _ConvertorValutarState extends State<ConvertorValutar> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Center(
+          title: const Center(
             child: Text('Currency convertor'),
           ),
         ),
         body: ListView(
           children: <Widget>[
             Image.network(
-                "https://storage0.dms.mpinteractiv.ro/media/1/1481/22467/15488613/1/4-2823078-publimedia-shutterstock-copy-copy.jpg?width=600"),
+                'https://storage0.dms.mpinteractiv.ro/media/1/1481/22467/15488613/1/4-2823078-publimedia-shutterstock-copy-copy.jpg?width=600'),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: TextField(
@@ -42,7 +42,7 @@ class _ConvertorValutarState extends State<ConvertorValutar> {
                   hintText: 'enter the amount in EUR',
                   errorText: _eroareInput,
                   suffixIcon: IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.close,
                     ),
                     onPressed: () {
@@ -53,7 +53,7 @@ class _ConvertorValutarState extends State<ConvertorValutar> {
                   ),
                 ),
                 keyboardType: TextInputType.number,
-                onChanged: (value) {
+                onChanged: (String value) {
                   _valoareInEuro = value;
                 },
               ),
@@ -67,11 +67,9 @@ class _ConvertorValutarState extends State<ConvertorValutar> {
                       // validare valoare in euro
                       bool valid = true;
                       bool punct = false;
-                      _eroareInput = null;
                       for (int i = 0; i < _valoareInEuro.length; i++) {
                         if (_valoareInEuro.codeUnitAt(i) != 46 &&
-                            (_valoareInEuro.codeUnitAt(i) < 48 ||
-                                _valoareInEuro.codeUnitAt(i) > 59)) {
+                            (_valoareInEuro.codeUnitAt(i) < 48 || _valoareInEuro.codeUnitAt(i) > 59)) {
                           valid = false;
                           _eroareInput = 'please insert a number';
                           break;
@@ -89,21 +87,20 @@ class _ConvertorValutarState extends State<ConvertorValutar> {
                       }
 
                       if (valid) {
+                        _eroareInput = '';
                         // conversie string => double
-                        double valoareEuroFloat = double.parse(_valoareInEuro);
+                        final double valoareEuroFloat = double.parse(_valoareInEuro);
 
                         // conversie euro => lei
-                        double valoareLeiFloat =
-                            valoareEuroFloat * _cursValutarEuroLei;
+                        final double valoareLeiFloat = valoareEuroFloat * _cursValutarEuroLei;
 
                         // conversie string rotunjire cu 2 zecimale
                         _valoareInLei = valoareLeiFloat.toStringAsFixed(2);
                       }
                     });
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 4.0, horizontal: 8.0),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
                     child: Text(
                       'CONVERT!',
                       style: TextStyle(
@@ -113,15 +110,14 @@ class _ConvertorValutarState extends State<ConvertorValutar> {
                     ),
                   ),
                   style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.grey[300]),
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.grey[300]!),
                   ),
                 ),
               ),
             ),
             Center(
               child: Text(
-                (_valoareInLei != null ? _valoareInLei + ' RON' : ''),
+                _valoareInLei != null ? _valoareInLei + ' RON' : '',
                 style: TextStyle(
                   color: Colors.grey[600],
                   fontSize: 50.0,
